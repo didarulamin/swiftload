@@ -1,0 +1,11 @@
+# Third-party proprietary material used for clean-room analysis. Never publish.
+*.exe
+analysis/
+
+# Build output and dependencies
+node_modules/
+app/dist/
+
+# OS / editor
+.DS_Store
+.vscode/

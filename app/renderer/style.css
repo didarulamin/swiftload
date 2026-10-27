@@ -1,0 +1,102 @@
+:root {
+  --bg: #ffffff;
+  --side: #f4f4f6;
+  --line: #e4e4e8;
+  --text: #1d1d1f;
+  --muted: #86868b;
+  --accent: #0a7cff;
+  --ok: #2fb55d;
+  --warn: #e0a100;
+  --err: #e5484d;
+  --sel: #e6f0ff;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1e1e20;
+    --side: #262629;
+    --line: #36363a;
+    --text: #f2f2f4;
+    --muted: #9a9aa0;
+    --sel: #213a5c;
+  }
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  font: 13px -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+button {
+  font: inherit;
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+button:disabled { opacity: .4; cursor: default; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  -webkit-app-region: drag;
+}
+.toolbar button { -webkit-app-region: no-drag; }
+.mac .toolbar { padding-left: 84px; } /* room for the traffic lights */
+.title { font-weight: 600; margin-right: 8px; }
+.spacer { flex: 1; }
+.muted { color: var(--muted); }
+.small { font-size: 11px; margin: -4px 0 8px; }
+
+.main { flex: 1; display: flex; min-height: 0; }
+.sidebar { width: 180px; background: var(--side); border-right: 1px solid var(--line); padding: 8px; overflow: auto; }
+.sidebar .group { font-size: 11px; font-weight: 600; color: var(--muted); margin: 12px 8px 4px; }
+.sidebar a { display: block; padding: 5px 8px; border-radius: 6px; cursor: pointer; }
+.sidebar a.active { background: var(--accent); color: #fff; }
+
+.list { flex: 1; overflow: auto; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+th {
+  position: sticky; top: 0; background: var(--bg);
+  text-align: left; font-weight: 500; color: var(--muted);
+  padding: 6px 10px; border-bottom: 1px solid var(--line);
+}
+th:nth-child(1) { width: 34%; }
+th:nth-child(3) { width: 22%; }
+td { padding: 7px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+tr.selected td { background: var(--sel); }
+.num { text-align: right; font-variant-numeric: tabular-nums; }
+.empty { color: var(--muted); text-align: center; margin-top: 80px; }
+
+.progress { position: relative; }
+.bar { height: 16px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.bar::after { content: ""; display: block; height: 100%; width: var(--p); background: var(--accent); }
+.bar.done::after { background: var(--ok); }
+.bar.paused::after, .bar.queued::after { background: var(--warn); }
+.bar.error::after { background: var(--err); }
+.progress span { position: absolute; inset: 0 10px; line-height: 30px; text-align: center; font-size: 11px; color: var(--text); text-shadow: 0 0 3px var(--bg); }
+
+dialog { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); width: 440px; padding: 18px 20px; }
+dialog::backdrop { background: rgba(0, 0, 0, .25); }
+dialog h2 { font-size: 15px; margin: 0 0 14px; }
+dialog label { display: block; margin-bottom: 10px; color: var(--muted); }
+dialog label.inline { display: inline; color: var(--text); }
+dialog input[type=url], dialog input[type=text], dialog input[type=number], dialog input[type=time], dialog select {
+  display: block; width: 100%; margin-top: 4px; padding: 6px 8px; font: inherit;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--side); color: var(--text);
+}
+dialog .row { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+dialog .row input { margin-top: 0; }
+fieldset { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
+menu { display: flex; justify-content: flex-end; gap: 8px; padding: 0; margin: 16px 0 0; }
+.error { color: var(--err); min-height: 1em; margin: 0; }

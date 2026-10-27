@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'">
+  <title>Swiftload</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="toolbar">
+    <div class="title">Swiftload</div>
+    <button id="btn-add" class="primary">＋ Add URL</button>
+    <button id="btn-resume" disabled>▶ Resume</button>
+    <button id="btn-pause" disabled>❚❚ Pause</button>
+    <button id="btn-delete" disabled>✕ Delete</button>
+    <span class="spacer"></span>
+    <span id="total-speed" class="muted"></span>
+    <button id="btn-settings">⚙ Settings</button>
+  </header>
+
+  <div class="main">
+    <nav class="sidebar" id="sidebar">
+      <div class="group">Status</div>
+      <a data-filter="all" class="active">All downloads</a>
+      <a data-filter="unfinished">Unfinished</a>
+      <a data-filter="finished">Finished</a>
+      <div class="group">Categories</div>
+      <a data-filter="cat:Compressed">Compressed</a>
+      <a data-filter="cat:Documents">Documents</a>
+      <a data-filter="cat:Music">Music</a>
+      <a data-filter="cat:Programs">Programs</a>
+      <a data-filter="cat:Video">Video</a>
+      <a data-filter="cat:General">General</a>
+    </nav>
+
+    <section class="list">
+      <table>
+        <thead><tr><th>Name</th><th class="num">Size</th><th>Progress</th><th class="num">Speed</th><th class="num">Time left</th><th>Added</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <p id="empty" class="empty">No downloads yet. Click “Add URL” or download something with the browser extension installed.</p>
+    </section>
+  </div>
+
+  <dialog id="dlg-add">
+    <form method="dialog">
+      <h2>Add download</h2>
+      <label>Address <input id="add-url" type="url" required placeholder="https://example.com/file.zip"></label>
+      <label>Save as (optional) <input id="add-name" type="text" placeholder="Use name from server"></label>
+      <label>Quality for YouTube, Facebook, Instagram, TikTok links
+        <select id="add-quality"><option value="best">Best</option><option value="1080">1080p</option><option value="720">720p</option><option value="480">480p</option><option value="mp3">MP3 audio</option></select>
+      </label>
+      <p id="add-error" class="error"></p>
+      <menu><button value="cancel" formnovalidate>Cancel</button><button id="add-ok" value="ok" class="primary">Start download</button></menu>
+    </form>
+  </dialog>
+
+  <dialog id="dlg-settings">
+    <form method="dialog">
+      <h2>Settings</h2>
+      <label>Download folder
+        <span class="row"><input id="set-dir" type="text" readonly><button type="button" id="set-pick">Choose…</button></span>
+      </label>
+      <p class="muted small">Files go into a subfolder per category (Video, Music, …).</p>
+      <label>Connections per download <input id="set-conn" type="number" min="1" max="32"></label>
+      <label>Simultaneous downloads <input id="set-active" type="number" min="1" max="20"></label>
+      <label>Speed limit, KB/s (0 = unlimited) <input id="set-limit" type="number" min="0"></label>
+      <fieldset>
+        <legend><label class="inline"><input id="set-sched" type="checkbox"> Scheduler: download only between</label></legend>
+        <span class="row"><input id="set-start" type="time"> and <input id="set-stop" type="time"></span>
+      </fieldset>
+      <menu><button value="cancel" formnovalidate>Cancel</button><button id="set-ok" value="ok" class="primary">Save</button></menu>
+    </form>
+  </dialog>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

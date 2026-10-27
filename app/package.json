@@ -1,0 +1,44 @@
+{
+  "name": "swiftload",
+  "productName": "Swiftload",
+  "version": "0.4.0",
+  "description": "Segmented download manager",
+  "main": "main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test test/",
+    "dist": "electron-builder --mac dmg --arm64",
+    "dist:win": "electron-builder --win nsis --x64"
+  },
+  "devDependencies": {
+    "electron": "45.0.0",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "local.swiftload",
+    "files": [
+      "main.js",
+      "preload.js",
+      "engine/**",
+      "renderer/**"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "identity": null
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "allowScripts": {
+    "electron@45.0.0": true,
+    "electron-winstaller": false
+  },
+  "license": "MIT",
+  "repository": "github:didarulamin/swiftload"
+}
