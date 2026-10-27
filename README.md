@@ -56,7 +56,7 @@ or press **⌘Q** to quit.
 
 **Requirements:** Windows 10 or 11, 64-bit.
 
-1. Download `Swiftload Setup <version>.exe` from the [Releases](../../releases) page.
+1. Download `Swiftload-Setup-<version>-x64.exe` from the [Releases](../../releases) page.
 2. Run it. The installer isn't code-signed, so Windows SmartScreen may show
    **"Windows protected your PC"**. Click **More info → Run anyway**.
 3. Pick an install folder and finish the setup. Swiftload appears in the Start menu.
