@@ -2,28 +2,30 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; img-src 'self' data:">
   <title>Swiftload</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="toolbar">
     <div class="title">Swiftload</div>
-    <button id="btn-add" class="primary">＋ Add URL</button>
-    <button id="btn-resume" disabled>▶ Resume</button>
-    <button id="btn-pause" disabled>❚❚ Pause</button>
-    <button id="btn-delete" disabled>✕ Delete</button>
+    <button id="btn-add" class="primary" title="Add a download (⌘/Ctrl+N)">＋ Add URL</button>
+    <button id="btn-resume" disabled title="Resume (Space)">▶ Resume</button>
+    <button id="btn-pause" disabled title="Pause (Space)">❚❚ Pause</button>
+    <button id="btn-delete" disabled title="Remove (Delete)">✕ Remove</button>
+    <button id="btn-folder" title="Show the file in its folder, or open the download folder">📂 Folder</button>
     <span class="spacer"></span>
     <span id="total-speed" class="muted"></span>
-    <button id="btn-settings">⚙ Settings</button>
+    <input id="search" type="search" placeholder="Search" title="Search (⌘/Ctrl+F)" aria-label="Search downloads">
+    <button id="btn-settings" title="Settings">⚙</button>
   </header>
 
   <div class="main">
     <nav class="sidebar" id="sidebar">
       <div class="group">Status</div>
-      <a data-filter="all" class="active">All downloads</a>
-      <a data-filter="unfinished">Unfinished</a>
-      <a data-filter="finished">Finished</a>
+      <a data-filter="all" class="active">All downloads <span class="count" data-count="all"></span></a>
+      <a data-filter="unfinished">Unfinished <span class="count" data-count="unfinished"></span></a>
+      <a data-filter="finished">Finished <span class="count" data-count="finished"></span></a>
       <div class="group">Categories</div>
       <a data-filter="cat:Compressed">Compressed</a>
       <a data-filter="cat:Documents">Documents</a>
@@ -31,14 +33,22 @@
       <a data-filter="cat:Programs">Programs</a>
       <a data-filter="cat:Video">Video</a>
       <a data-filter="cat:General">General</a>
+      <div class="sidebar-actions">
+        <button id="btn-pause-all">❚❚ Pause all</button>
+        <button id="btn-resume-all">▶ Resume all</button>
+        <button id="btn-clear">Clear finished</button>
+      </div>
     </nav>
 
-    <section class="list">
+    <section class="list" id="list">
       <table>
-        <thead><tr><th>Name</th><th class="num">Size</th><th>Progress</th><th class="num">Speed</th><th class="num">Time left</th><th>Added</th></tr></thead>
+        <thead><tr>
+          <th data-sort="name">Name</th><th data-sort="size" class="num">Size</th><th>Progress</th>
+          <th class="num">Speed</th><th class="num">Time left</th><th data-sort="added">Added</th>
+        </tr></thead>
         <tbody id="rows"></tbody>
       </table>
-      <p id="empty" class="empty">No downloads yet. Click “Add URL” or download something with the browser extension installed.</p>
+      <p id="empty" class="empty">No downloads yet. Click “Add URL”, copy a download link, or download something with the browser extension installed.</p>
     </section>
   </div>
 
@@ -69,6 +79,7 @@
         <legend><label class="inline"><input id="set-sched" type="checkbox"> Scheduler: download only between</label></legend>
         <span class="row"><input id="set-start" type="time"> and <input id="set-stop" type="time"></span>
       </fieldset>
+      <label class="inline check"><input id="set-clip" type="checkbox"> Offer to download links I copy</label>
       <menu><button value="cancel" formnovalidate>Cancel</button><button id="set-ok" value="ok" class="primary">Save</button></menu>
     </form>
   </dialog>

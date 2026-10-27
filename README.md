@@ -49,8 +49,8 @@ For Intel Macs, [build from source](#build-from-source).
      ```
 4. Optional: allow notifications to get a message when a download finishes.
 
-Closing the window keeps downloads running in the background. Click the Dock icon to bring the window back,
-or press **⌘Q** to quit.
+Closing the window keeps downloads running in the background. Click the Dock icon or the menu-bar icon to bring
+the window back. Quit with **⌘Q** or **Quit Swiftload** in the menu-bar icon.
 
 ## Install on Windows
 
@@ -61,7 +61,9 @@ or press **⌘Q** to quit.
    **"Windows protected your PC"**. Click **More info → Run anyway**.
 3. Pick an install folder and finish the setup. Swiftload appears in the Start menu.
 
-On Windows, closing the window quits the app. Unfinished downloads resume next time you start it.
+Closing the window keeps downloads running in the background. Click the Swiftload icon in the notification area
+(system tray, bottom-right; it may be under the **^** arrow) to bring the window back. Right-click it and choose
+**Quit Swiftload** to quit. Unfinished downloads resume next time you start it.
 
 ---
 
@@ -161,11 +163,42 @@ The extension only talks to the Swiftload app on your own computer (`127.0.0.1`)
 
 | Action | How |
 |---|---|
-| Pause | Select a download, click **❚❚ Pause** |
-| Resume | Select it, click **▶ Resume** (or double-click a paused/failed download) |
-| Delete | Select it, click **✕ Delete**. You'll be asked whether to delete the file too |
-| Open a finished file | Double-click it |
+| Open a finished file | Click its blue name, double-click the row, or press **Enter** |
+| Show the file in Finder / Explorer | Right-click → **Show in Finder** / **Show in Explorer**, or click **📂 Folder** |
+| Pause / Resume | **❚❚ Pause** / **▶ Resume**, or press **Space**. Double-click a paused or failed download to resume it |
+| Remove | **✕ Remove** or **Delete**. Choose **Remove from List** or **Move to Trash** (Recycle Bin on Windows) |
+| Copy the link or file path | Right-click → **Copy Link** / **Copy File Path** |
+| Download again | Right-click → **Download Again** (keeps the old file; the new one gets a new name) |
+| Select several | **⌘/Ctrl-click** to add, **Shift-click** for a range, **⌘/Ctrl+A** for all. Actions apply to all selected |
+| Search | Type in the search box (**⌘/Ctrl+F**). **Esc** clears it |
+| Sort | Click the **Name**, **Size** or **Added** column header; click again to reverse |
 | Filter | Use the sidebar: All, Unfinished, Finished, or a category |
+| Everything at once | Sidebar: **Pause all**, **Resume all**, **Clear finished** (clears the list only, files stay) |
+
+**Keyboard shortcuts**
+
+| Key | Action |
+|---|---|
+| ⌘/Ctrl+N | Add URL |
+| ⌘/Ctrl+F | Search |
+| Enter | Open the selected finished file |
+| Space | Pause or resume the selection |
+| Delete / Backspace | Remove the selection |
+| ↑ / ↓ | Move the selection |
+| ⌘/Ctrl+A | Select all |
+| Esc | Clear the selection or search |
+
+### Copied links
+
+When you copy a download link (for example a `.zip`, `.mp4` or `.dmg` URL, or a YouTube video page), Swiftload
+shows a notification. Click it to open the Add dialog with the link filled in. **＋ Add URL** also fills
+in a copied link automatically. Turn this off in **⚙ Settings → Offer to download links I copy**.
+
+### Menu-bar / tray icon
+
+Swiftload adds an icon to the macOS menu bar or the Windows notification area (system tray), with
+**Show Swiftload**, **Add URL…**, **Pause All**, **Resume All**, **Open Download Folder** and **Quit**.
+While downloads run, the Dock / taskbar icon shows overall progress (and on macOS, the number of active downloads).
 
 ### Where files are saved
 
@@ -191,6 +224,7 @@ Change the base folder in **⚙ Settings → Download folder**.
 | Simultaneous downloads | 3 | How many downloads run at once; the rest wait in the queue |
 | Speed limit | 0 (unlimited) | Total speed in KB/s across all downloads |
 | Scheduler | Off | Only download between the two times. Running downloads pause at the end time and continue at the start time |
+| Offer to download links I copy | On | Show a notification when you copy a download link |
 
 ---
 
@@ -243,7 +277,7 @@ For an Intel Mac build, run `npx electron-builder --mac dmg --x64`.
 
 ```
 app/                     Electron desktop app
-  main.js                Window, app lifecycle, local bridge for the extension
+  main.js                Window, tray, right-click menu, clipboard watcher, local bridge for the extension
   preload.js             Safe API between the window and the app
   engine/
     download.js          Segmented HTTP(S) downloader with resume and speed limiting
@@ -252,6 +286,7 @@ app/                     Electron desktop app
     ytdlp.js             YouTube / Facebook / Instagram / TikTok via yt-dlp
     queue.js             Download list, queue, scheduler, categories, saving state
   renderer/              The window UI (HTML/CSS/JS, no framework)
+  assets/                Menu-bar / tray icons
   test/                  Tests (node:test, no extra dependencies)
 extension/               Chromium extension (Manifest V3)
 ```

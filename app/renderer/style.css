@@ -84,7 +84,7 @@ tr.selected td { background: var(--sel); }
 .bar.done::after { background: var(--ok); }
 .bar.paused::after, .bar.queued::after { background: var(--warn); }
 .bar.error::after { background: var(--err); }
-.progress span { position: absolute; inset: 0 10px; line-height: 30px; text-align: center; font-size: 11px; color: var(--text); text-shadow: 0 0 3px var(--bg); }
+.progress span { position: absolute; inset: 0 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; white-space: nowrap; font-size: 11px; color: var(--text); text-shadow: 0 0 3px var(--bg); }
 
 dialog { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); width: 440px; padding: 18px 20px; }
 dialog::backdrop { background: rgba(0, 0, 0, .25); }
@@ -100,3 +100,27 @@ dialog .row input { margin-top: 0; }
 fieldset { border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; }
 menu { display: flex; justify-content: flex-end; gap: 8px; padding: 0; margin: 16px 0 0; }
 .error { color: var(--err); min-height: 1em; margin: 0; }
+
+/* --- list extras --- */
+.icon { display: inline-block; width: 18px; margin-right: 6px; text-align: center; vertical-align: -3px; font-size: 13px; }
+.icon img { width: 16px; height: 16px; vertical-align: top; }
+.fname.link { color: var(--accent); cursor: pointer; }
+.fname.link:hover { text-decoration: underline; }
+tr { cursor: default; }
+th[data-sort] { cursor: pointer; }
+th[data-sort]:hover { color: var(--text); }
+th[data-sort]::after { content: attr(data-dir); margin-left: 4px; font-size: 9px; }
+
+#search {
+  -webkit-app-region: no-drag;
+  width: 180px; padding: 5px 9px; font: inherit;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--side); color: var(--text);
+}
+.sidebar { display: flex; flex-direction: column; }
+.sidebar a { display: flex; justify-content: space-between; }
+.count { color: var(--muted); font-size: 11px; }
+.sidebar a.active .count { color: #fff; }
+.sidebar-actions { margin-top: auto; padding-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+.sidebar-actions button { text-align: left; }
+label.check { display: block; margin-top: 12px; }
+th:nth-child(6) { width: 136px; }

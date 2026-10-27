@@ -24,12 +24,27 @@ function categoryOf(name) {
   return 'General';
 }
 
+// A copied piece of text worth offering as a download: one http(s) URL that points at a
+// known file type, or a page on a yt-dlp video site.
+function isDownloadLink(text) {
+  const s = (text || '').trim();
+  if (!s || /\s/.test(s) || s.length > 4096) return false;
+  try {
+    const u = new URL(s);
+    if (u.protocol !== 'http:' && u.protocol !== 'https:') return false;
+    return isVideoSite(u.href) || categoryOf(decodeURIComponent(path.posix.basename(u.pathname))) !== 'General';
+  } catch {
+    return false;
+  }
+}
+
 const DEFAULTS = {
   baseDir: path.join(os.homedir(), 'Downloads'),
   connections: 8,
   maxActive: 3,
   speedLimit: 0, // KB/s, 0 = unlimited
   schedule: { enabled: false, start: '02:00', stop: '07:00' },
+  watchClipboard: true,
 };
 
 const minutes = (hhmm) => { const [h, m] = hhmm.split(':').map(Number); return h * 60 + m; };
@@ -85,6 +100,35 @@ class Manager extends EventEmitter {
     if (it && (it.status === 'paused' || it.status === 'error')) { it.status = 'queued'; it.error = null; }
     this.pump();
     this.save();
+  }
+
+  // Pause everything first, then save once; pausing one by one would let pump() start the next queued item.
+  pauseAll() {
+    for (const dl of this.running.values()) dl.pause();
+    this.running.clear();
+    for (const it of this.items) if (it.status === 'downloading' || it.status === 'queued') it.status = 'paused';
+    this.save();
+  }
+
+  resumeAll() {
+    for (const it of this.items) if (it.status === 'paused' || it.status === 'error') { it.status = 'queued'; it.error = null; }
+    this.pump();
+    this.save();
+  }
+
+  clearFinished() {
+    this.items = this.items.filter((it) => it.status !== 'done');
+    this.save();
+  }
+
+  // Same link and options as a new item; the old entry and file stay untouched.
+  redownload(id) {
+    const it = this.find(id);
+    if (!it) return null;
+    return this.add({
+      url: it.url, name: it.ytdlp ? null : it.name, referer: it.headers?.referer, cookie: it.headers?.cookie,
+      hls: it.hls, audioUrl: it.audioUrl, quality: it.ytdlp?.quality,
+    });
   }
 
   remove(id, deleteFile) {
@@ -185,4 +229,4 @@ class Manager extends EventEmitter {
   }
 }
 
-module.exports = { Manager, categoryOf };
+module.exports = { Manager, categoryOf, isDownloadLink };
